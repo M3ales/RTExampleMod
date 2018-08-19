@@ -23,7 +23,9 @@ namespace RTExampleMod
 
         private void Api_RegisterRelationships(object sender, EventArgsRegisterRelationships e)
         {
-            e.Relationships.Add(new MyNewRelationship());
+            //Just commenting out this part so we can try other mods.
+            //e.Relationships.Add(new MyNewRelationship());
+            e.Relationships.Add(new VillagerGenderNameRelationship());
         }
     }
 }

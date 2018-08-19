@@ -60,6 +60,7 @@
     <Compile Include="MyNewRelationship.cs" />
     <Compile Include="RTExampleMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VillagerGenderNameRelationship.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="manifest.json" />
