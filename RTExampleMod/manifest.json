@@ -1,0 +1,16 @@
+{
+  "Name": "RelationshipTooltips Example Mod",
+  "Author": "M3ales",
+  "Version": "1.0.0",
+  "Description": "Demonstrates a basic integration of the RT API.",
+  "UniqueID": "M3ales.RTExampleMod",
+  "EntryDll": "RTExampleMod.dll",
+  "MinimumApiVersion": "2.0",
+  "UpdateKeys": [ "GitHub:M3ales/RTExampleMod" ],
+  "Dependencies": [
+    {
+      "UniqueID": "M3ales.RelationshipTooltips",
+      "MinimumVersion": "2.0.0-beta.2"
+    }
+  ]
+}
