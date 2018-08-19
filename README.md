@@ -153,6 +153,69 @@ And ingame we see:
 
 As you can see since we have `BreakAfter => false;` The mod has continued to add the other Relationships after ours, but if we'd used `BreakAfter => true;` we would only see the text of our mod (since it has the highest Priority at 5000).
 
+Moving on to a more useful example, you can make a simple mod to append the NPC's gender to their name by:
+
+```csharp
+using RelationshipTooltips.Relationships;
+using StardewValley;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace RTExampleMod
+{
+    /// <summary>
+    /// A Relationship which appends the NPC's gender to the end of their name.
+    /// </summary>
+    public class VillagerGenderNameRelationship : IRelationship
+    {
+        public Func<Character, Item, bool> ConditionsMet => CheckConditions;//This can be a lambda if you prefer
+
+        /// <summary>
+        /// Checks if this text should be added to the Tooltip currently being displayed. This is a method implementation of Func<Character, Item, bool>. 
+        /// </summary>
+        /// <param name="c"></param>
+        /// <param name="i"></param>
+        /// <returns></returns>
+        private bool CheckConditions(Character c, Item i)
+        {
+            //If its an NPC and Villager, then add the text below to the tooltip.
+            return c is NPC && ((NPC)c).isVillager();
+        }
+
+        public int Priority => -500;
+
+        public bool BreakAfter => false;
+
+        public string GetDisplayText<T>(T character, Item item = null) where T : Character
+        {
+            return "";
+        }
+
+        public string GetHeaderText<T>(T character, Item item = null) where T : Character
+        {
+            NPC npc = character as NPC;
+            if (npc == null)
+                return "";
+            return npc.Gender == NPC.male ? " - Male" : " - Female";
+        }
+    }
+}
+```
+And we need to disable the first mod we made - we can just comment it out for now.
+```csharp
+private void Api_RegisterRelationships(object sender, EventArgsRegisterRelationships e)
+{
+    //Just commenting out this part so we can try other mods.
+    //e.Relationships.Add(new MyNewRelationship());
+    e.Relationships.Add(new VillagerGenderNameRelationship());
+}
+```
+Building the solution and running it will yield:
+
+![picture alt](https://i.imgur.com/7csqOGn.png "The mod shows up as you can see, with Priority 5000")
 
 ## Notes on API
 * Don't use Priorities which are single increments of eachother unless you are **EXPLICITLY** intending them never to have anything run inbetween.
