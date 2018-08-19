@@ -147,6 +147,13 @@ We can test if it is working by checking SMAPI console after startup. RT will lo
 
 ![picture alt](https://i.imgur.com/BUn4KGR.png "The mod shows up as you can see, with Priority 5000")
 
+And ingame we see:
+
+![picture alt](https://i.imgur.com/WEoTjD3.png "The mod stacking with NPCRelationship and VillagerBirthdayRelationship")
+
+As you can see since we have `BreakAfter => false;` The mod has continued to add the other Relationships after ours, but if we'd used `BreakAfter => true;` we would only see the text of our mod (since it has the highest Priority at 5000).
+
+
 ## Notes on API
 * Don't use Priorities which are single increments of eachother unless you are **EXPLICITLY** intending them never to have anything run inbetween.
 * Try stay away from Priorities which are the same, since their ordering is random dependant on the load order.
