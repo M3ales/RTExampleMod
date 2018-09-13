@@ -89,23 +89,38 @@ namespace RTExampleMod
 
         public bool BreakAfter => false; //If this is true then all other relationships of lower priority will be skipped.
 
-        public string GetDisplayText<T>(T character, Item item = null) where T : Character
+        public string GetDisplayText<T>(string currentDisplay, T character, Item item = null) where T : Character
         {
-          return "This is the body text and is small";
+            return "This is the body text and is small";
         }
 
-        public string GetHeaderText<T>(T character, Item item = null) where T : Character
+        public string GetHeaderText<T>(string currentHeader, T character, Item item = null) where T : Character
         {
             return "This is the header text and is large";
         }
     }
 }
 ```
-Going back to your Mod's main entry file, we can add the new relationship we just made by adding it to the param's Relationship list:
+Going back to your Mod's main entry file, we can add the new relationship we just made by adding it to the param's Relationship list for OnHover relationships:
 ```csharp
 private void Api_RegisterRelationships(object sender, EventArgsRegisterRelationships e)
 {
-  e.Relationships.Add(new MyNewRelationship());
+  e.RelationshipsOnHover.Add(new MyNewRelationship());
+}
+```
+If we want the tooltip to always display we can do this instead:
+```csharp
+private void Api_RegisterRelationships(object sender, EventArgsRegisterRelationships e)
+{
+  e.RelationshipsOnScreen.Add(new MyNewRelationship());
+}
+```
+Combining the two will provide behaviour where the tooltip will appear on screen, and be replaced by the hover tooltip when the player moves their mouse over the specified character. (Give it a test to see what I mean)
+```csharp
+private void Api_RegisterRelationships(object sender, EventArgsRegisterRelationships e)
+{
+  e.RelationshipsOnHover.Add(new MyNewRelationship());
+  e.RelationshipsOnScreen.Add(new MyNewRelationship());
 }
 ```
 
@@ -117,7 +132,7 @@ You'll want to add a Dependency snippet to the end of your `manifest.json`.
   "Dependencies": [
     {
       "UniqueID": "M3ales.RelationshipTooltips",
-      "MinimumVersion": "2.0.0-beta.2"
+      "MinimumVersion": "2.0.0"
     }
 ```
 
@@ -126,7 +141,7 @@ The full `manifest.json` should look something like this.
 {
   "Name": "RelationshipTooltips Example Mod",
   "Author": "M3ales",
-  "Version": "1.0.0",
+  "Version": "1.1.0",
   "Description": "Demonstrates a basic integration of the RT API.",
   "UniqueID": "M3ales.RTExampleMod",
   "EntryDll": "RTExampleMod.dll",
@@ -135,7 +150,7 @@ The full `manifest.json` should look something like this.
   "Dependencies": [
     {
       "UniqueID": "M3ales.RelationshipTooltips",
-      "MinimumVersion": "2.0.0-beta.2"
+      "MinimumVersion": "2.0.0"
     }
   ]
 }
@@ -171,7 +186,7 @@ namespace RTExampleMod
     /// </summary>
     public class VillagerGenderNameRelationship : IRelationship
     {
-        public Func<Character, Item, bool> ConditionsMet => CheckConditions;//This can be a lambda if you prefer
+        public Func<Character, Item, bool> ConditionsMet => CheckConditions;//Instead of a lambda we use a method to keep things clean.
 
         /// <summary>
         /// Checks if this text should be added to the Tooltip currently being displayed. This is a method implementation of Func<Character, Item, bool>. 
@@ -181,7 +196,7 @@ namespace RTExampleMod
         /// <returns></returns>
         private bool CheckConditions(Character c, Item i)
         {
-            //If its an NPC and Villager, then add the text below to the tooltip.
+            //If its an NPC and Villager, then the header and display will be added to the tooltip.
             return c is NPC && ((NPC)c).isVillager();
         }
 
@@ -189,28 +204,31 @@ namespace RTExampleMod
 
         public bool BreakAfter => false;
 
-        public string GetDisplayText<T>(T character, Item item = null) where T : Character
+        public string GetDisplayText<T>(string currentDisplay, T character, Item item = null) where T : Character
         {
             return "";
         }
 
-        public string GetHeaderText<T>(T character, Item item = null) where T : Character
+        public string GetHeaderText<T>(string currentHeader, T character, Item item = null) where T : Character
         {
             NPC npc = character as NPC;
-            if (npc == null)
+            if (npc == null)//just incase
                 return "";
             return npc.Gender == NPC.male ? " - Male" : " - Female";
         }
     }
 }
+
 ```
 And we need to disable the first mod we made - we can just comment it out for now.
 ```csharp
 private void Api_RegisterRelationships(object sender, EventArgsRegisterRelationships e)
 {
-    //Just commenting out this part so we can try other mods.
-    //e.Relationships.Add(new MyNewRelationship());
-    e.Relationships.Add(new VillagerGenderNameRelationship());
+            //Just commenting out this part so we can try other mods.
+            //e.RelationshipsOnHover.Add(new MyNewRelationship());
+            //e.RelationshipsOnScreen.Add(new MyNewRelationship());
+            e.RelationshipsOnHover.Add(new VillagerGenderNameRelationship());
+            e.RelationshipsOnHover.Add(new MonsterHealthRelationship(Monitor));
 }
 ```
 Building the solution and running it will yield:
@@ -218,6 +236,6 @@ Building the solution and running it will yield:
 ![picture alt](https://i.imgur.com/7csqOGn.png "The mod shows up as you can see, with Priority 5000")
 
 ## Notes on API
-* Don't use Priorities which are single increments of eachother unless you are **EXPLICITLY** intending them never to have anything run inbetween.
+* Don't use Priorities which are single increments of eachother unless you are **EXPLICITLY** intending them never to have anything run inbetween. (Someone who wants to put something between will just change your priorities anyways, so no point)
 * Try stay away from Priorities which are the same, since their ordering is random dependant on the load order.
 * You can see what other elements have been registered - and their priorities by iterating through `e.Relationships`.
