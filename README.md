@@ -238,4 +238,4 @@ Building the solution and running it will yield:
 ## Notes on API
 * Don't use Priorities which are single increments of eachother unless you are **EXPLICITLY** intending them never to have anything run inbetween. (Someone who wants to put something between will just change your priorities anyways, so no point)
 * Try stay away from Priorities which are the same, since their ordering is random dependant on the load order.
-* You can see what other elements have been registered - and their priorities by iterating through `e.Relationships`.
+* You can see what other elements have been registered - and their priorities by iterating through `e.RelationshipsOnHover` and `e.RelationshipsOnScreen`.
