@@ -1,13 +1,13 @@
 # RTExampleMod
-Example Mod for [SMAPI 2.7](https://smapi.io/), [Relationship Tooltips 2.0.0-beta.2](https://github.com/M3ales/RelationshipTooltips/releases/tag/v2.0.0-beta.2) and [Bookcase 0.4.0](https://stardewvalley.curseforge.com/projects/bookcase/files/2605330)
+Example Mod for [SMAPI 2.7](https://smapi.io/), [Relationship Tooltips 2.0.0](https://github.com/M3ales/RelationshipTooltips/releases/) and [Bookcase 0.5.0](https://stardewvalley.curseforge.com/projects/bookcase/)
 
 ## API
 As of RelationshipTooltips 2.0.0-beta.2 you can now add your own text to the relationship tooltips mod. It currently will search for *anything* inheriting from `StardewValley.Character` and allow you to provide conditions for different text displays. It's currently limited to text, but hopefully in future this will expand to Images.
 ### Installation
 #### Requirements
 * [SMAPI 2.6 or later](https://smapi.io/) (Preferably later, but it should still work in installs down to SMAPI 2.0)
-* [RelationshipTooltips 2.0.0-beta.2](https://github.com/M3ales/RelationshipTooltips/releases) or later installed in `StardewValley\Mods`
-* [Bookcase 0.4.0](https://stardewvalley.curseforge.com/projects/bookcase/files) or later installed in `StardewValley\Mods`
+* [RelationshipTooltips 2.0.0](https://github.com/M3ales/RelationshipTooltips/releases) or later installed in `StardewValley\Mods`
+* [Bookcase 0.5.0](https://stardewvalley.curseforge.com/projects/bookcase/files) or later installed in `StardewValley\Mods`
 * Stardew Valley 1.3 or later.
 * Mod targetting .net 4.5.2 or higher. (4.5.2 recommended) [You can change this - details below]
 #### Referencing the RT API
