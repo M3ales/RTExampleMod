@@ -1,4 +1,4 @@
-﻿using RelationshipTooltips.Relationships;
+using RelationshipTooltips.Relationships;
 using StardewValley;
 using System;
 using System.Collections.Generic;
@@ -13,7 +13,7 @@ namespace RTExampleMod
     /// </summary>
     public class VillagerGenderNameRelationship : IRelationship
     {
-        public Func<Character, Item, bool> ConditionsMet => CheckConditions;
+        public Func<Character, Item, bool> ConditionsMet => CheckConditions;//Instead of a lambda we use a method to keep things clean.
 
         /// <summary>
         /// Checks if this text should be added to the Tooltip currently being displayed. This is a method implementation of Func<Character, Item, bool>. 
@@ -23,7 +23,7 @@ namespace RTExampleMod
         /// <returns></returns>
         private bool CheckConditions(Character c, Item i)
         {
-            //If its an NPC and Villager, then add the text below to the tooltip.
+            //If its an NPC and Villager, then the header and display will be added to the tooltip.
             return c is NPC && ((NPC)c).isVillager();
         }
 
@@ -31,15 +31,15 @@ namespace RTExampleMod
 
         public bool BreakAfter => false;
 
-        public string GetDisplayText<T>(T character, Item item = null) where T : Character
+        public string GetDisplayText<T>(string currentDisplay, T character, Item item = null) where T : Character
         {
             return "";
         }
 
-        public string GetHeaderText<T>(T character, Item item = null) where T : Character
+        public string GetHeaderText<T>(string currentHeader, T character, Item item = null) where T : Character
         {
             NPC npc = character as NPC;
-            if (npc == null)
+            if (npc == null)//just incase
                 return "";
             return npc.Gender == NPC.male ? " - Male" : " - Female";
         }

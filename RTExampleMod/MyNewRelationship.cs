@@ -12,12 +12,12 @@ namespace RTExampleMod
 
         public bool BreakAfter => false; //If this is true then all other relationships of lower priority will be skipped.
 
-        public string GetDisplayText<T>(T character, Item item = null) where T : Character
+        public string GetDisplayText<T>(string currentDisplay, T character, Item item = null) where T : Character
         {
             return "This is the body text and is small";
         }
 
-        public string GetHeaderText<T>(T character, Item item = null) where T : Character
+        public string GetHeaderText<T>(string currentHeader, T character, Item item = null) where T : Character
         {
             return "This is the header text and is large";
         }
